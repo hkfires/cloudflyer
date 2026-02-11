@@ -1,14 +1,13 @@
-# Use the official Ubuntu image as the base image
-FROM kasmweb/desktop:1.16.0-rolling-daily
+# Use Ubuntu 22.04 (jammy) based image with Python 3.10
+FROM kasmweb/ubuntu-jammy-desktop:1.16.1
 
 # Set environment variables to avoid interactive prompts during build
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install necessary packages for Xvfb and pyvirtualdisplay
 USER root
-RUN add-apt-repository -y ppa:deadsnakes/ppa && \
-    apt-get update && \
-    apt-get install -y python3.10 python3.10-venv python3.10-dev && \
+RUN apt-get update && \
+    apt-get install -y python3 python3-venv python3-dev && \
     apt-get install -y \
         wget \
         gnupg \
@@ -41,13 +40,13 @@ RUN wget https://mirror.cs.uchicago.edu/google-chrome/pool/main/g/google-chrome-
     rm google-chrome-stable_126.0.6478.126-1_amd64.deb
 
 # Install Pip
-RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10
+RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3
 
 # Set up a working directory
 WORKDIR /app
 
 # Create and activate virtual environment
-RUN python3.10 -m venv /app/venv
+RUN python3 -m venv /app/venv
 ENV PATH="/app/venv/bin:$PATH"
 
 # Copy application files
