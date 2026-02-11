@@ -27,11 +27,21 @@ async def test_proxy(proxy_config: dict):
     Test the connectivity of a proxy.
 
     Args:
-        proxy_config (dict): A dictionary containing proxy details (scheme, host, port).
+        proxy_config (dict): A dictionary containing proxy details (scheme, host, port, username, password).
 
     Raises:
         Exception: If the proxy test fails.
     """
-    proxy_url = f"{proxy_config['scheme']}://{proxy_config['host']}:{proxy_config['port']}"
+    scheme = proxy_config['scheme']
+    host = proxy_config['host']
+    port = proxy_config['port']
+    username = proxy_config.get('username')
+    password = proxy_config.get('password')
+
+    if username and password:
+        proxy_url = f"{scheme}://{username}:{password}@{host}:{port}"
+    else:
+        proxy_url = f"{scheme}://{host}:{port}"
+
     async with httpx.AsyncClient(proxy=proxy_url) as client:
         await client.get("https://httpbin.org/get", timeout=10)

@@ -26,6 +26,8 @@ class ProxyConfig(BaseModel):
     scheme: str
     host: str
     port: int
+    username: Optional[str] = None
+    password: Optional[str] = None
 
 class WSSocksConfig(BaseModel):
     url: str
